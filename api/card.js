@@ -20,20 +20,22 @@ function formatTime(ms) {
   return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
-function buildCard({ playing, song, artist, albumArt, progress, duration }) {
-  const title = playing && song ? song : "Not playing right now";
-  const subtitle = playing && artist ? artist : "Open Spotify to start a session";
+function buildCard({ playing, status, source, song, artist, albumArt, progress, duration, songUrl }) {
+  const stateLabel = source === "recently_played" ? "LAST PLAYED" : status === "paused" ? "PAUSED" : playing ? "CURRENTLY PLAYING" : "NOT PLAYING";
+  const title = song ? song : "Not playing right now";
+  const subtitle = artist ? artist : "Open Spotify to start a session";
   const safeTitle = escapeXml(title);
   const safeSubtitle = escapeXml(subtitle);
-  const safeProgress = duration > 0 ? clamp(progress / duration, 0, 1) : 0;
+  const safeProgress = playing && duration > 0 ? clamp(progress / duration, 0, 1) : source === "recently_played" && duration > 0 ? 1 : 0;
   const progressWidth = Math.round(292 * safeProgress);
-  const progressLabel = playing && duration > 0 ? `${formatTime(progress)} / ${formatTime(duration)}` : "Idle";
+  const progressLabel = source === "recently_played" ? "Last played" : playing && duration > 0 ? `${formatTime(progress)} / ${formatTime(duration)}` : "Idle";
   const progressLabelSafe = escapeXml(progressLabel);
   const albumImage = albumArt
     ? `<image href="${escapeXml(albumArt)}" x="24" y="24" width="112" height="112" rx="20" ry="20" preserveAspectRatio="xMidYMid slice" />`
     : `<rect x="24" y="24" width="112" height="112" rx="20" fill="url(#albumFallback)" />
        <path d="M53 79c12-16 20-19 30-19 10 0 18 4 27 19" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="4" stroke-linecap="round" />
        <circle cx="66" cy="67" r="8" fill="rgba(255,255,255,0.92)" />`;
+  const safeSongUrl = songUrl ? escapeXml(songUrl) : "";
 
   const waveform = [0.28, 0.58, 0.42, 0.8, 0.36, 0.92, 0.46, 0.76, 0.34, 0.64, 0.48, 0.84]
     .map((height, index) => {
@@ -80,8 +82,8 @@ function buildCard({ playing, song, artist, albumArt, progress, duration }) {
   ${albumImage}
 
   <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" fill="#ffffff">
-    <text x="160" y="60" font-size="14" font-weight="700" letter-spacing="0.18em" fill="rgba(255,255,255,0.62)">CURRENTLY PLAYING</text>
-    <text x="160" y="102" font-size="28" font-weight="800">${safeTitle}</text>
+    <text x="160" y="60" font-size="14" font-weight="700" letter-spacing="0.18em" fill="rgba(255,255,255,0.62)">${escapeXml(stateLabel)}</text>
+    ${safeSongUrl ? `<a href="${safeSongUrl}" target="_blank" rel="noreferrer noopener"><text x="160" y="102" font-size="28" font-weight="800">${safeTitle}</text></a>` : `<text x="160" y="102" font-size="28" font-weight="800">${safeTitle}</text>`}
     <text x="160" y="134" font-size="18" font-weight="500" fill="rgba(255,255,255,0.76)">${safeSubtitle}</text>
     <text x="160" y="176" font-size="13" font-weight="600" fill="rgba(255,255,255,0.55)">${progressLabelSafe}</text>
   </g>
@@ -100,6 +102,8 @@ function buildCard({ playing, song, artist, albumArt, progress, duration }) {
     <path d="M18 33V15l16 9-16 9Z" fill="#1db954" />
     <text x="58" y="29" font-size="16" font-weight="700" fill="rgba(255,255,255,0.75)">Spotify</text>
   </g>
+
+  ${safeSongUrl ? `<a href="${safeSongUrl}" target="_blank" rel="noreferrer noopener"><rect x="18" y="18" width="784" height="184" rx="24" fill="transparent" /></a>` : ""}
 </svg>`;
 }
 
