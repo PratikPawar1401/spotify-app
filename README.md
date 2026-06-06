@@ -24,7 +24,7 @@ Your refresh token must be generated with these Spotify scopes:
 ## README Embed
 
 ```md
-[![Spotify card](https://YOUR-PROJECT.vercel.app/api/card)](https://open.spotify.com/)
+[![Spotify card](https://spotify-app-git-main-pratiks-projects-fb9812c3.vercel.app/api/card)](https://open.spotify.com/)
 ```
 
 ## Local Development
