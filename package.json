@@ -1,0 +1,14 @@
+{
+  "name": "spotify-card",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dynamic Spotify now-playing card for GitHub READMEs.",
+  "main": "api/spotify.js",
+  "scripts": {
+    "start": "vercel dev",
+    "lint": "node --check api/spotify.js && node --check api/card.js && node --check lib/spotify.js"
+  },
+  "dependencies": {
+    "axios": "^1.11.0"
+  }
+}
