@@ -6,9 +6,11 @@
   "main": "api/spotify.js",
   "scripts": {
     "start": "vercel dev",
-    "lint": "node --check api/spotify.js && node --check api/card.js && node --check lib/spotify.js"
+    "lint": "node --check api/spotify.js && node --check api/card.js && node --check api/card.png.js && node --check lib/cardTemplate.js && node --check lib/spotify.js"
   },
   "dependencies": {
-    "axios": "^1.11.0"
+    "@vercel/og": "^0.8.5",
+    "axios": "^1.11.0",
+    "react": "^19.2.7"
   }
 }

@@ -5,7 +5,8 @@ A professional Spotify widget for GitHub READMEs.
 ## Endpoints
 
 - `/api/spotify` returns the current Spotify track when playing, or the last played track when idle.
-- `/api/card` returns a dynamic SVG card for embedding in a README.
+- `/api/card` returns a dynamic SVG card for browser use.
+- `/api/card.png` returns the production-ready PNG card for GitHub READMEs.
 
 ## Environment Variables
 
@@ -24,7 +25,7 @@ Your refresh token must be generated with these Spotify scopes:
 ## README Embed
 
 ```md
-[![Spotify card](https://spotify-app-git-main-pratiks-projects-fb9812c3.vercel.app/api/card)](https://open.spotify.com/)
+![Spotify Card](https://MY-DOMAIN.vercel.app/api/card.png)
 ```
 
 ## Local Development
@@ -38,6 +39,6 @@ npm run start
 
 The card is serverless-friendly, caches the access token briefly between requests, and falls back to the most recently played track when Spotify is idle.
 
-The JSON endpoint also returns `songUrl`, so your own UI can deep-link to Spotify directly.
+The PNG endpoint is the primary README endpoint. The JSON endpoint also returns `songUrl`, so your own UI can deep-link to Spotify directly.
 
 If the API returns `status: "permission_required"`, regenerate the refresh token with the scopes above. If it returns `status: "not_playing"`, Spotify did not report any active or recent track for that account.
