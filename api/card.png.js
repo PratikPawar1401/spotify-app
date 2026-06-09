@@ -74,7 +74,10 @@ function createErrorResponse(message) {
 module.exports = async (req, res) => {
   try {
     const data = await getCurrentlyPlaying();
-    const model = createCardModel(data);
+    const model = {
+      ...createCardModel(data),
+      preferInlineAlbumArt: true,
+    };
     const response = new ImageResponse(React.createElement(CardTemplate, { model }), {
       width: 820,
       height: 220,
